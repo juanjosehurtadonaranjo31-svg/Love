@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Terminal</title>
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: black;
+    overflow: hidden;
+    height: 100vh;
+    font-family: monospace;
+}
+
+#bootScreen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: black;
+    color: #00ff88;
+    padding: 20px;
+    overflow: auto;
+    z-index: 100;
+}
+
+#terminal {
+    white-space: pre-wrap;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+#startBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 35px;
+    border: none;
+    border-radius: 15px;
+    background: #ff0080;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0);
+    transition: 0.5s;
+    z-index: 200;
+    box-shadow: 0 0 20px #ff0080, 0 0 50px #ff0080;
+}
+
+#startBtn:hover {
+    transform: scale(1.1) !important;
+}
+
+#loveScene {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: radial-gradient(circle at top, #ff4da6, #2b1055 70%);
+    text-align: center;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2s infinite;
+}
+
+@keyframes twinkle {
+    0%   { opacity: 0.2; }
+    50%  { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+.container {
+    width: 90%;
+    z-index: 10;
+}
+
+#text {
+    font-size: 2.2rem;
+    font-weight: 700;
+    min-height: 150px;
+    transition: opacity 0.3s, transform 0.1s;
+    text-shadow:
+        0 0 10px #fff,
+        0 0 20px #ff99cc,
+        0 0 40px #ff4da6,
+        0 0 80px #ff0080;
+}
+
+.heart {
+    position: absolute;
+    animation: float linear infinite;
+    pointer-events: none;
+}
+
+@keyframes float {
+    from {
+        transform: translateY(100vh) scale(0.5) rotate(0deg);
+        opacity: 0;
+    }
+    10% { opacity: 1; }
+    to {
+        transform: translateY(-120vh) scale(1.5) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+#finalMessage {
+    position: absolute;
+    font-size: 3rem;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 2s;
+    text-shadow: 0 0 10px white, 0 0 20px pink, 0 0 40px red;
+    z-index: 20;
+}
+
+.bigHeart {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    background: red;
+    transform: rotate(-45deg);
+    opacity: 0;
+    transition: opacity 2s;
+    z-index: 5;
+}
+
+.bigHeart::before,
+.bigHeart::after {
+    content: '';
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    background: red;
+    border-radius: 50%;
+}
+
+.bigHeart::before { top: -110px; }
+.bigHeart::after  { left: 110px; }
+
+</style>
+</head>
+<body>
+
+<div id="bootScreen">
+    <pre id="terminal"></pre>
+    <button id="startBtn">INICIAR</button>
+</div>
+
+<div id="loveScene">
+    <div class="bigHeart" id="bigHeart"></div>
+    <div class="container">
+        <div id="text"></div>
+    </div>
+    <div id="finalMessage">❤️ Te amo ❤️</div>
+</div>
+
+<script>
+
+const terminal   = document.getElementById("terminal");
+const startBtn   = document.getElementById("startBtn");
+const bootScreen = document.getElementById("bootScreen");
+
+const fakeCode =
+`> Opening project...
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Love Project</title>
+  <style>
+    body { background: black; overflow: hidden; }
+    .heart { animation: float 5s infinite; }
+  </style>
+</head>
+<body>
+  <h1>Te amo</h1>
+  <script>
+    const languages = [
+      "Español: Te amo",
+      "Inglés: I love you",
+      "Francés: Je t'aime"
+    ];
+    function startLove() {
+      console.log("Loading feelings...");
+    }
+    startLove();
+  <` + `/script>
+</body>
+</html>
+
+> Compiling emotions...
+> Rendering hearts...
+> Injecting love...
+> Build completed ✔
+
+> Press START
+`;
+
+let charIndex = 0;
+
+function typeCode() {
+    if (charIndex < fakeCode.length) {
+        terminal.textContent += fakeCode.charAt(charIndex);
+        charIndex++;
+        bootScreen.scrollTop = bootScreen.scrollHeight;
+        const speed = Math.random() > 0.97 ? 70 : 8;
+        setTimeout(typeCode, speed);
+    } else {
+        startBtn.style.opacity   = "1";
+        startBtn.style.transform = "scale(1)";
+    }
+}
+
+typeCode();
+
+const loveScene    = document.getElementById("loveScene");
+const text         = document.getElementById("text");
+const finalMessage = document.getElementById("finalMessage");
+const bigHeart     = document.getElementById("bigHeart");
+
+const languages = [
+    "Español: Te amo",
+    "Inglés: I love you",
+    "Francés: Je t'aime",
+    "Alemán: Ich liebe dich",
+    "Italiano: Ti amo",
+    "Portugués: Eu te amo",
+    "Ruso: Я тебя люблю",
+    "Japonés: 愛してる",
+    "Coreano: 사랑해",
+    "Árabe: أنا أحبك",
+    "Turco: Seni seviyorum",
+    "Polaco: Kocham cię",
+    "Hebreo: אני אוהב אותך",
+    "Persa: دوستت دارم"
+];
+
+for (let j = 0; j < 100; j++) {
+    const star = document.createElement("div");
+    star.className = "star";
+    star.style.left              = Math.random() * 100 + "vw";
+    star.style.top               = Math.random() * 100 + "vh";
+    star.style.animationDuration = (Math.random() * 3 + 1) + "s";
+    star.style.animationDelay    = (Math.random() * 3) + "s";
+    loveScene.appendChild(star);
+}
+
+startBtn.addEventListener("click", () => {
+    bootScreen.style.transition = "opacity 1s";
+    bootScreen.style.opacity    = "0";
+    setTimeout(() => {
+        bootScreen.style.display = "none";
+        loveScene.style.display  = "flex";
+        intro();
+    }, 1000);
+});
+
+function typeWriter(message, speed, callback) {
+    text.textContent = "";
+    let i = 0;
+    function tick() {
+        if (i < message.length) {
+            text.textContent += message.charAt(i);
+            i++;
+            setTimeout(tick, speed);
+        } else {
+            if (callback) callback();
+        }
+    }
+    tick();
+}
+
+function intro() {
+    typeWriter(
+        "Oye... ¿te han dicho 'te amo' en distintos idiomas?",
+        45,
+        () => setTimeout(() => {
+            typeWriter("¿No?... Pues ❤️", 45,
+                () => setTimeout(showLanguages, 2000)
+            );
+        }, 2000)
+    );
+}
+
+let current = 0;
+
+function showLanguages() {
+    function next() {
+        if (current >= languages.length) { finalScene(); return; }
+
+        text.style.opacity   = "1";
+        text.textContent     = "";
+
+        const phrase = languages[current];
+        let i = 0;
+
+        function aggressiveTyping() {
+            if (i < phrase.length) {
+                text.textContent += phrase.charAt(i);
+                text.style.transform =
+                    `translate(${Math.random()*30-15}px, ${Math.random()*30-15}px)
+                     scale(${1 + Math.random()*0.3})
+                     rotate(${Math.random()*10-5}deg)`;
+                i++;
+                setTimeout(aggressiveTyping, 15 + Math.random() * 35);
+            } else {
+                text.style.transform = "none";
+                current++;
+                setTimeout(() => {
+                    text.style.opacity = "0";
+                    setTimeout(next, 300);
+                }, 1000);
+            }
+        }
+
+        aggressiveTyping();
+    }
+    next();
+}
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className   = "heart";
+    heart.textContent = "❤️";
+    heart.style.left             = Math.random() * 100 + "vw";
+    heart.style.fontSize         = (Math.random() * 25 + 15) + "px";
+    heart.style.animationDuration = (Math.random() * 5 + 5) + "s";
+    loveScene.appendChild(heart);
+    setTimeout(() => heart.remove(), 10000);
+}
+
+setInterval(createHeart, 180);
+
+function finalScene() {
+    text.style.display     = "none";
+    bigHeart.style.opacity = "1";
+    setTimeout(() => { finalMessage.style.opacity = "1"; }, 1200);
+}
+
+</script>
+</body>
+</html>
